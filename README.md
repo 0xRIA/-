@@ -1,6 +1,6 @@
-# 販売支援システム (PSYS) - 得意先管理・集計業務システム
+# 販売支援システム (PSYS) - osu! Cyber Edition
 
-株式会社 健康食品ロイヤル社様向けに開発された、顧客管理および売上集計を支援するWebアプリケーションです。  
+株式会社 健康食品ロイヤル社向け「得意先管理・得意先別集計業務システム」です。  
 Django 5.1（Python 3.13）とMySQL 8.3をベースに構築され、ゲーム「osu!」にインスパイアされたスタイリッシュなネオンサイバーデザインを備えています。
 
 ---
@@ -9,7 +9,7 @@ Django 5.1（Python 3.13）とMySQL 8.3をベースに構築され、ゲーム�
 
 ### 1. 共通・認証システム
 - **従業員ログイン / ログアウト**: 従業員番号（6桁）とパスワードによる認証、セッション管理
-- **アクセス制御ガード**: ログイン必須デコレータ（`@login_required_psys`）によるセキュリティ保護
+- **アクセス制御ガード**: ログイン必須デコレータ（`@login_required_psys`）による未認証アクセスの自動リダイレクト保護
 - **従業員新規登録**: 新規利用従業員のアカウント発行
 
 ### 2. 得意先管理サブシステム
@@ -26,59 +26,55 @@ Django 5.1（Python 3.13）とMySQL 8.3をベースに構築され、ゲーム�
 
 ---
 
-## 📂 ドキュメント一覧
+## 🛠️ 動作要件・技術スタック
 
-詳細な設計資料およびマニュアルは以下をご参照ください：
-
-- 📄 [**1次開発提案書**](1次開発提案書.md) - プロジェクト背景、機能採否、技術的改善方針、将来構想
-- 📐 [**システム設計書（完成版）**](システム設計書_完成版.md) - Mermaid画面遷移図、ER図、URL一覧、画面入出力仕様
-- 📖 [**操作マニュアル**](操作マニュアル.md) - システム起動手順、テストアカウント、各機能の操作フロー
-
----
-
-## 🛠️ 技術スタック・環境
-
-- **言語**: Python 3.13
-- **フレームワーク**: Django 5.1
-- **データベース**: MySQL 8.3 (`psysdb3`) / SQLite（テスト用）
-- **フロントエンド**: HTML5, CSS3, Bootstrap 5.3, osu!スタイルのサイバー・ネオンUI
-- **ライブラリ**: `mysqlclient`, `sqlparse`, `asgiref`
+- **Python**: 3.13+
+- **Django**: 5.1+
+- **Database**: MySQL 8.3 (`psysdb3`)
+- **Frontend**: HTML5, CSS3, Bootstrap 5.3, osu! Cyber Theme (Outfit / Noto Sans JP)
+- **Dependencies**: `mysqlclient`, `sqlparse`, `asgiref`
 
 ---
 
-## 🚀 クイックスタート
+## 🚀 起動手順
 
 ### 1. リポジトリのクローン
-```bash
+```powershell
 git clone https://github.com/0xRIA/-.git
 cd -
 ```
 
-### 2. 仮想環境の作成とパッケージインストール
+### 2. 仮想環境の作成と依存関係のインストール
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-### 3. データベースセットアップ
-MySQLでデータベース `psysdb3` を作成し、初期データをインポートします。
+### 3. データベースセットアップ (MySQL)
+MySQLに接続し、データベースの作成と初期SQLを流し込みます：
 ```sql
 CREATE DATABASE psysdb3 CHARACTER SET utf8mb4;
--- psysdb.sql をインポート
+```
+```powershell
+# 初期データの投入
+mysql -u root -p psysdb3 < psysdb.sql
 ```
 
-### 4. サーバー起動
+> **データベース設定**:  
+> `config/settings.py` 内の `DATABASES` 設定をお使いのMySQLユーザー・パスワードに合わせて確認・変更してください。
+
+### 4. サーバーの起動
 ```powershell
 python manage.py runserver
 ```
-ブラウザで `http://127.0.0.1:8000/` にアクセスします。
+起動後、ブラウザで [http://127.0.0.1:8000/](http://127.0.0.1:8000/) にアクセスしてください。
 
 ---
 
 ## 🧪 テストの実行
 
-全22件の単体・結合テスト（All Green）を実行できます：
+全22件の単体・結合テストが実装されています：
 ```powershell
 python manage.py test psys
 ```
