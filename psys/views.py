@@ -79,7 +79,10 @@ def CustomerSearch(request):
     search_id = None
 
     if request.method == 'POST':
-        search_id = request.POST.get('seartch_id', '').strip()
+        # プロトタイプ互換(seartch_id)・仕様書準拠(Customer_code)・標準(search_id)をすべて受け付ける
+        search_id = (request.POST.get('seartch_id') or 
+                     request.POST.get('Customer_code') or 
+                     request.POST.get('search_id') or '').strip()
         if not search_id:
             error = "得意先コードを入力してください。"
         else:
@@ -88,7 +91,9 @@ def CustomerSearch(request):
                 error = "該当する得意先コードは存在しません。"
     else:
         # GETリクエスト（一覧からのリンク等のクエリパラメータ対応）
-        search_id = request.GET.get('search_id', '').strip()
+        search_id = (request.GET.get('search_id') or 
+                     request.GET.get('Customer_code') or 
+                     request.GET.get('seartch_id') or '').strip()
         if search_id:
             customer = Customer.objects.filter(customer_code=search_id, delete_flag=0).first()
             if not customer:
@@ -97,7 +102,8 @@ def CustomerSearch(request):
     return render(request, "psys/CustomerSearch.html", {
         'customer': customer,
         'error': error,
-        'seartch_id': search_id
+        'seartch_id': search_id,
+        'Customer_code': search_id,
     })
 
 
@@ -202,7 +208,8 @@ def CustomerDelete(request):
     """得意先削除画面 (CustomerDelete.html)"""
     customer = None
     error = None
-    customer_code = request.GET.get('search_id', '').strip()
+    customer_code = (request.GET.get('search_id') or 
+                     request.GET.get('Customer_code') or '').strip()
 
     if customer_code:
         customer = Customer.objects.filter(customer_code=customer_code, delete_flag=0).first()
@@ -211,7 +218,9 @@ def CustomerDelete(request):
 
     if request.method == 'POST':
         action_type = request.POST.get('action_type', 'search')
-        customer_code = request.POST.get('Customer_code', '').strip()
+        customer_code = (request.POST.get('Customer_code') or 
+                         request.POST.get('customer_code') or 
+                         request.POST.get('search_id') or '').strip()
 
         if action_type == 'search':
             if not customer_code:
@@ -227,18 +236,24 @@ def CustomerDelete(request):
             })
 
         elif action_type == 'delete':
-            target_customer = Customer.objects.filter(customer_code=customer_code, delete_flag=0).first()
-            if target_customer:
-                # 論理削除（delete_flag = 1）
-                target_customer.delete_flag = 1
-                target_customer.save()
-                return render(request, "psys/CustomerDeleteResult.html", {
-                    'success': True
-                })
-            else:
+            try:
+                target_customer = Customer.objects.filter(customer_code=customer_code, delete_flag=0).first()
+                if target_customer:
+                    # 論理削除（delete_flag = 1）
+                    target_customer.delete_flag = 1
+                    target_customer.save()
+                    return render(request, "psys/CustomerDeleteResult.html", {
+                        'success': True
+                    })
+                else:
+                    return render(request, "psys/CustomerDeleteResult.html", {
+                        'success': False,
+                        'error_detail': "（対象の得意先が存在しないか既に削除されています）"
+                    })
+            except Exception as e:
                 return render(request, "psys/CustomerDeleteResult.html", {
                     'success': False,
-                    'error_detail': "（対象の得意先が存在しないか既に削除されています）"
+                    'error_detail': f"（削除処理失敗: {str(e)}）"
                 })
 
     return render(request, "psys/CustomerDelete.html", {
@@ -259,7 +274,8 @@ def CustomerUpdate(request):
     """得意先更新画面 (CustomerUpdate.html)"""
     customer = None
     error = None
-    customer_code = request.GET.get('search_id', '').strip()
+    customer_code = (request.GET.get('search_id') or 
+                     request.GET.get('Customer_code') or '').strip()
 
     if customer_code:
         customer = Customer.objects.filter(customer_code=customer_code, delete_flag=0).first()
@@ -268,7 +284,9 @@ def CustomerUpdate(request):
 
     if request.method == 'POST':
         action_type = request.POST.get('action_type', 'search')
-        customer_code = request.POST.get('Customer_code', '').strip()
+        customer_code = (request.POST.get('Customer_code') or 
+                         request.POST.get('customer_code') or 
+                         request.POST.get('search_id') or '').strip()
 
         if action_type == 'search':
             if not customer_code:
@@ -297,21 +315,59 @@ def CustomerUpdate(request):
             customer_address = request.POST.get('Customer_address', '').strip()
             discount_rate_str = request.POST.get('Discount_rate', '0').strip()
 
+            # バリデーションチェック
+            form_errors = []
+            if not customer_name:
+                form_errors.append("得意先名を入力してください。")
+            elif len(customer_name) > 32:
+                form_errors.append("得意先名は32文字以内で入力してください。")
+
+            if not customer_telno:
+                form_errors.append("電話番号を入力してください。")
+            elif len(customer_telno) > 13:
+                form_errors.append("電話番号は13文字以内で入力してください。")
+
+            if not customer_postalcode:
+                form_errors.append("郵便番号を入力してください。")
+            elif len(customer_postalcode) > 8:
+                form_errors.append("郵便番号は8文字以内で入力してください。")
+
+            if not customer_address:
+                form_errors.append("住所を入力してください。")
+            elif len(customer_address) > 40:
+                form_errors.append("住所は40文字以内で入力してください。")
+
+            discount_rate = 0
+            if discount_rate_str:
+                try:
+                    discount_rate = int(discount_rate_str)
+                    if discount_rate < 0 or discount_rate > 99:
+                        form_errors.append("割引率は0〜99の範囲で入力してください。")
+                except ValueError:
+                    form_errors.append("割引率は半角数値で入力してください。")
+
+            if form_errors:
+                return render(request, "psys/CustomerUpdateResult.html", {
+                    'success': False,
+                    'error_detail': f"（入力エラー: {' / '.join(form_errors)}）"
+                })
+
             try:
-                discount_rate = int(discount_rate_str)
-            except ValueError:
-                discount_rate = 0
+                target_customer.customer_name = customer_name
+                target_customer.customer_telno = customer_telno
+                target_customer.customer_postalcode = customer_postalcode
+                target_customer.customer_address = customer_address
+                target_customer.discount_rate = discount_rate
+                target_customer.save()
 
-            target_customer.customer_name = customer_name
-            target_customer.customer_telno = customer_telno
-            target_customer.customer_postalcode = customer_postalcode
-            target_customer.customer_address = customer_address
-            target_customer.discount_rate = discount_rate
-            target_customer.save()
-
-            return render(request, "psys/CustomerUpdateResult.html", {
-                'success': True
-            })
+                return render(request, "psys/CustomerUpdateResult.html", {
+                    'success': True
+                })
+            except Exception as e:
+                return render(request, "psys/CustomerUpdateResult.html", {
+                    'success': False,
+                    'error_detail': f"（更新処理失敗: {str(e)}）"
+                })
 
     return render(request, "psys/CustomerUpdate.html", {
         'customer': customer,
@@ -487,6 +543,27 @@ def EmployeeRegist(request):
                 'employee_name': employee_name
             })
 
+        if len(employee_no) > 6:
+            return render(request, "psys/EmployeeRegist.html", {
+                'error_message': "従業員番号は6文字以内で入力してください。",
+                'employee_no': employee_no,
+                'employee_name': employee_name
+            })
+
+        if len(employee_name) > 32:
+            return render(request, "psys/EmployeeRegist.html", {
+                'error_message': "従業員名は32文字以内で入力してください。",
+                'employee_no': employee_no,
+                'employee_name': employee_name
+            })
+
+        if len(password) > 8:
+            return render(request, "psys/EmployeeRegist.html", {
+                'error_message': "パスワードは8文字以内で入力してください。",
+                'employee_no': employee_no,
+                'employee_name': employee_name
+            })
+
         if Employee.objects.filter(employee_no=employee_no).exists():
             return render(request, "psys/EmployeeRegist.html", {
                 'error_message': f"従業員番号「{employee_no}」は既に登録されています。",
@@ -494,16 +571,23 @@ def EmployeeRegist(request):
                 'employee_name': employee_name
             })
 
-        Employee.objects.create(
-            employee_no=employee_no,
-            employee_name=employee_name,
-            password=password
-        )
+        try:
+            Employee.objects.create(
+                employee_no=employee_no,
+                employee_name=employee_name,
+                password=password
+            )
 
-        return render(request, "psys/EmployeeRegist.html", {
-            'success_message': "新しい従業員が正常に登録されました。",
-            'employee_no': employee_no,
-            'employee_name': employee_name
-        })
+            return render(request, "psys/EmployeeRegist.html", {
+                'success_message': "新しい従業員が正常に登録されました。",
+                'employee_no': employee_no,
+                'employee_name': employee_name
+            })
+        except Exception as e:
+            return render(request, "psys/EmployeeRegist.html", {
+                'error_message': f"登録できませんでした。({str(e)})",
+                'employee_no': employee_no,
+                'employee_name': employee_name
+            })
 
     return render(request, "psys/EmployeeRegist.html")

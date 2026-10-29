@@ -193,6 +193,28 @@ class CustomerManagementTests(PsysBaseTestCase):
         self.assertEqual(c.customer_name, 'B店社（更新後）')
         self.assertEqual(c.discount_rate, 10)
 
+    def test_customer_update_validation(self):
+        # 文字数オーバーの更新で500エラーにならず安全にエラー返却されるか
+        response = self.client.post(reverse('psys:CustomerUpdate'), {
+            'action_type': 'update',
+            'Customer_code': 'RA0002',
+            'Customer_name': 'あ' * 40,  # 32文字超過
+            'Customer_telno': '06-128-3582',
+            'Customer_postalcode': '220-0002',
+            'Customer_address': '大阪市',
+            'Discount_rate': '10',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "更新できませんでした。")
+
+    def test_customer_search_with_customer_code_param(self):
+        # 仕様書通りの Customer_code キーでも検索できるか
+        response = self.client.post(reverse('psys:CustomerSearch'), {
+            'Customer_code': 'RA0001'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "A店社")
+
     def test_customer_delete_logical(self):
         # 削除前
         self.assertEqual(Customer.objects.filter(customer_code='RA0003', delete_flag=0).count(), 1)
@@ -281,3 +303,12 @@ class EmployeeRegistTests(PsysBaseTestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "既に登録されています")
+
+    def test_employee_regist_length_validation(self):
+        response = self.client.post(reverse('psys:EmployeeRegist'), {
+            'employee_no': 'R2000999',  # 7文字以上
+            'employee_name': '長すぎる番号',
+            'password': 'password'
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "従業員番号は6文字以内で入力してください。")
