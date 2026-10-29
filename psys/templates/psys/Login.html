@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}ログイン - 販売支援システム{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card card-custom p-4">
+            <h3 class="card-title text-center mb-4">ログイン</h3>
+
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form action="{% url 'psys:login' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="Employee_no" class="form-label">従業員番号（6桁）</label>
+                    <input type="text" name="Employee_no" id="Employee_no" class="form-control" maxlength="6" value="{{ employee_no|default:'' }}" required placeholder="例: R20001">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">パスワード（8桁）</label>
+                    <input type="password" name="password" id="password" class="form-control" maxlength="8" required placeholder="パスワードを入力">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" name="loginButton" class="btn btn-primary">ログイン</button>
+                    <a href="{% url 'psys:Index' %}" name="topButton" class="btn btn-outline-secondary">top</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

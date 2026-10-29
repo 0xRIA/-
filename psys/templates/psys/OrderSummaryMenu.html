@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}得意先別集計メニュー - 販売支援システム{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-9">
+        <h2 class="header-title text-success">得意先別集計メニュー</h2>
+        <p class="text-muted">集計業務を選択してください。</p>
+
+        <div class="row g-4 mt-2">
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 text-center">
+                    <h5 class="text-success mb-3">月別受注集計</h5>
+                    <p class="text-muted small">指定した年月の得意先別受注金額を集計して一覧表示します。</p>
+                    <a href="{% url 'psys:MonthlyOrderSummary' %}" name="MonthlyOrderSummary" class="btn btn-outline-success btn-sm mt-auto">月別受注集計へ</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 text-center">
+                    <h5 class="text-success mb-3">年次受注集計</h5>
+                    <p class="text-muted small">指定した年の得意先別年間受注金額を集計して一覧表示します。</p>
+                    <a href="{% url 'psys:YearlyOrderSummary' %}" name="YearlyOrderSummary" class="btn btn-outline-success btn-sm mt-auto">年次受注集計へ</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 text-center">
+                    <h5 class="text-success mb-3">商品別受注集計</h5>
+                    <p class="text-muted small">特定の得意先について、商品ごとの受注数量・受注金額を集計します。</p>
+                    <a href="{% url 'psys:ItemOrderSummary' %}" name="ItemOrderSummary" class="btn btn-outline-success btn-sm mt-auto">商品別受注集計へ</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+            <a href="{% url 'psys:MainMenu' %}" name="MainMenuButton" class="btn btn-secondary">管理メニュー</a>
+            <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger">ログアウト</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

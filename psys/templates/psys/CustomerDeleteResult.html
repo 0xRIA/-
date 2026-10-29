@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}得意先削除結果 - 販売支援システム{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-7">
+        <div class="card card-custom p-4 text-center">
+            {% if success %}
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">削除完了</h4>
+                <p class="mb-0">削除しました。</p>
+            </div>
+            {% else %}
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">削除失敗</h4>
+                <p class="mb-0">削除できませんでした。{{ error_detail }}</p>
+            </div>
+            {% endif %}
+
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a href="{% url 'psys:CustomerList' %}" class="btn btn-primary">得意先一覧へ</a>
+                <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerMnagementMenuButton" class="btn btn-secondary">得意先管理メニュー</a>
+                <a href="{% url 'psys:CustomerDelete' %}" name="back" class="btn btn-outline-secondary">戻る</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

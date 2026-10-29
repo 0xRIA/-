@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}従業員新規登録 - 販売支援システム{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-3">
+    <div class="col-md-7">
+        <h2 class="header-title text-info">従業員新規登録</h2>
+
+        {% if success_message %}
+        <div class="card card-custom p-4 mb-4 text-center">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">登録完了</h4>
+                <p>{{ success_message }}</p>
+                <hr>
+                <p class="mb-0">従業員番号：<strong>{{ employee_no }}</strong>、従業員名：<strong>{{ employee_name }}</strong></p>
+            </div>
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <a href="{% url 'psys:EmployeeRegist' %}" class="btn btn-outline-info">続けて登録する</a>
+                <a href="{% url 'psys:MainMenu' %}" class="btn btn-secondary">管理メニューへ</a>
+            </div>
+        </div>
+        {% else %}
+
+        {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        <div class="card card-custom p-4 mb-4">
+            <form action="{% url 'psys:EmployeeRegist' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="employee_no" class="form-label fw-bold">従業員番号（6桁） <span class="text-danger">*</span></label>
+                    <input type="text" name="employee_no" id="employee_no" class="form-control" maxlength="6" value="{{ employee_no|default:'' }}" required placeholder="例: R20005">
+                </div>
+                <div class="mb-3">
+                    <label for="employee_name" class="form-label fw-bold">従業員名 <span class="text-danger">*</span></label>
+                    <input type="text" name="employee_name" id="employee_name" class="form-control" maxlength="32" value="{{ employee_name|default:'' }}" required placeholder="例: 尾崎次郎">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-bold">パスワード（8桁以内） <span class="text-danger">*</span></label>
+                    <input type="password" name="password" id="password" class="form-control" maxlength="8" required placeholder="8桁以内のパスワード">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-info text-white">登録</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+            <a href="{% if request.session.employee_no %}{% url 'psys:MainMenu' %}{% else %}{% url 'psys:Index' %}{% endif %}" class="btn btn-secondary">戻る</a>
+            {% if request.session.employee_no %}
+            <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger">ログアウト</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
