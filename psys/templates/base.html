@@ -4,38 +4,458 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}販売支援システム{% endblock %}</title>
+    <!-- Google Fonts: Outfit & Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            /* osu! 風 近未来サイバー・カラーパレット */
+            --osu-bg-dark: #121218;
+            --osu-bg-surface: #1E1E2A;
+            --osu-bg-surface-trans: rgba(30, 30, 42, 0.82);
+            --osu-bg-surface-hover: rgba(40, 40, 56, 0.95);
+            --osu-pink: #FF66AA;
+            --osu-pink-light: #FF88C2;
+            --osu-purple: #A855F7;
+            --osu-purple-deep: #7C3AED;
+            --osu-cyan: #38BDF8;
+            --osu-text-main: #FFFFFF;
+            --osu-text-muted: #B2B7CB;
+            --osu-border: rgba(255, 102, 170, 0.28);
+            --osu-border-subtle: rgba(255, 255, 255, 0.12);
+            --osu-glow-pink: 0 0 20px rgba(255, 102, 170, 0.55);
+            --osu-glow-purple: 0 0 22px rgba(168, 85, 247, 0.55);
+            --osu-glow-strong: 0 0 30px rgba(255, 102, 170, 0.7), 0 0 50px rgba(168, 85, 247, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: var(--osu-bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255, 102, 170, 0.14) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #121218 0%, #0c0c11 100%);
+            background-attachment: fixed;
+            color: var(--osu-text-main);
+            font-family: 'Outfit', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
+
+        /* osu! ナビゲーションバー */
+        .navbar-custom {
+            background: rgba(18, 18, 24, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 2px solid var(--osu-pink);
+            box-shadow: 0 4px 25px rgba(255, 102, 170, 0.2);
+            padding: 0.85rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
         .navbar-brand {
-            font-weight: bold;
+            font-weight: 800;
+            font-size: 1.35rem;
+            letter-spacing: 1px;
+            color: var(--osu-text-main) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease-in-out;
         }
-        .card-custom {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
+        .navbar-brand .osu-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--osu-pink), var(--osu-purple));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #fff;
+            box-shadow: var(--osu-glow-pink);
+            transition: all 0.3s ease-in-out;
         }
-        .table th {
-            background-color: #e9ecef;
+        .navbar-brand:hover {
+            transform: scale(1.03);
+            text-shadow: 0 0 12px rgba(255, 102, 170, 0.6);
+        }
+        .navbar-brand:hover .osu-badge {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .nav-link {
+            color: var(--osu-text-muted) !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.5rem 1.1rem !important;
+            border-radius: 9999px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            letter-spacing: 0.3px;
+        }
+        .nav-link:hover {
+            color: #FFFFFF !important;
+            background: rgba(255, 102, 170, 0.18);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 102, 170, 0.3);
+        }
+        .nav-link:active {
+            transform: scale(0.95);
+        }
+
+        /* osu! カードパネル */
+        .card-custom, .card {
+            background: var(--osu-bg-surface-trans) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--osu-border) !important;
+            border-radius: 28px !important;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+            color: var(--osu-text-main) !important;
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.28s ease !important;
+        }
+        .card-custom:hover {
+            border-color: rgba(255, 102, 170, 0.55) !important;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 102, 170, 0.25) !important;
+        }
+
+        /* 見出しデザイン */
+        .header-title, h1, h2, h3, h4, h5, h6 {
+            color: var(--osu-text-main);
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
         .header-title {
-            border-bottom: 2px solid #0d6efd;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid var(--osu-pink) !important;
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 16px rgba(255, 102, 170, 0.3);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, var(--osu-pink) 0%, var(--osu-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 完全カプセル型ボタン & osu! マイクロインタラクション */
+        .btn {
+            border-radius: 9999px !important; /* 完全な角丸 / カプセル型 */
+            font-weight: 700 !important;
+            letter-spacing: 0.6px;
+            padding: 0.62rem 1.7rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* ホバー時: 1.05倍拡大 & ネオングロー */
+        .btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: var(--osu-glow-pink);
+        }
+
+        /* クリック時: 0.95倍縮小 (心地よい押し込み感) */
+        .btn:active {
+            transform: scale(0.95) translateY(1px) !important;
+            box-shadow: 0 0 8px rgba(255, 102, 170, 0.4) !important;
+        }
+
+        /* 各種ボタンスタイル */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--osu-pink) 0%, var(--osu-purple) 100%) !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 4px 15px rgba(255, 102, 170, 0.35);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #FF7EB9 0%, #B76DF8 100%) !important;
+            box-shadow: var(--osu-glow-strong) !important;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+        }
+        .btn-success:hover {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6) !important;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+            color: #121218 !important;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+        }
+        .btn-warning:hover {
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.6) !important;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #F43F5E 0%, #BE123C 100%) !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.35);
+        }
+        .btn-danger:hover {
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.6) !important;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: #FFFFFF !important;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.16) !important;
+            border-color: rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .btn-outline-primary {
+            background: transparent !important;
+            border: 2px solid var(--osu-pink) !important;
+            color: var(--osu-pink) !important;
+        }
+        .btn-outline-primary:hover {
+            background: var(--osu-pink) !important;
+            color: #FFFFFF !important;
+            box-shadow: var(--osu-glow-pink) !important;
+        }
+
+        .btn-outline-secondary {
+            background: transparent !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            color: var(--osu-text-muted) !important;
+        }
+        .btn-outline-secondary:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+            border-color: #FFFFFF !important;
+            color: #FFFFFF !important;
+        }
+
+        .btn-outline-danger {
+            background: transparent !important;
+            border: 1.5px solid #F43F5E !important;
+            color: #F43F5E !important;
+        }
+        .btn-outline-danger:hover {
+            background: #F43F5E !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 0 18px rgba(244, 63, 94, 0.5) !important;
+        }
+
+        .btn-outline-warning {
+            background: transparent !important;
+            border: 1.5px solid #F59E0B !important;
+            color: #F59E0B !important;
+        }
+        .btn-outline-warning:hover {
+            background: #F59E0B !important;
+            color: #121218 !important;
+            box-shadow: 0 0 18px rgba(245, 158, 11, 0.5) !important;
+        }
+
+        .btn-outline-success {
+            background: transparent !important;
+            border: 1.5px solid #10B981 !important;
+            color: #10B981 !important;
+        }
+        .btn-outline-success:hover {
+            background: #10B981 !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 0 18px rgba(16, 185, 129, 0.5) !important;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 1.15rem !important;
+            font-size: 0.85rem !important;
+        }
+        .btn-lg {
+            padding: 0.85rem 2.4rem !important;
+            font-size: 1.15rem !important;
+        }
+
+        /* 入力フォーム（業務用配慮：高い視認性とゆったりしたパディング） */
+        .form-control, .form-select {
+            background: rgba(18, 18, 24, 0.85) !important;
+            border: 1.5px solid var(--osu-border-subtle) !important;
+            border-radius: 14px !important;
+            color: #FFFFFF !important;
+            padding: 0.75rem 1.25rem !important;
+            font-size: 1rem;
+            transition: all 0.25s ease-in-out;
+        }
+        .form-control:focus, .form-select:focus {
+            background: rgba(26, 26, 36, 0.95) !important;
+            border-color: var(--osu-pink) !important;
+            box-shadow: 0 0 18px rgba(255, 102, 170, 0.45) !important;
+            color: #FFFFFF !important;
+            outline: none;
+        }
+        .form-control::placeholder {
+            color: #6C728A;
+        }
+        .form-control[readonly], .form-control:disabled {
+            background: rgba(22, 22, 30, 0.55) !important;
+            color: #8D93A8 !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        .form-label {
+            color: var(--osu-text-main);
+            font-weight: 600;
+            margin-bottom: 0.45rem;
+            letter-spacing: 0.4px;
+        }
+        .form-text {
+            color: var(--osu-text-muted) !important;
+            font-size: 0.85rem;
+            margin-top: 0.35rem;
+        }
+
+        /* テーブル（業務用配慮：見やすさ・十分な余白） */
+        .table-responsive {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--osu-border);
+            background: var(--osu-bg-surface-trans);
+        }
+        .table {
+            color: var(--osu-text-main) !important;
+            margin-bottom: 0 !important;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: transparent !important;
+        }
+        .table th, .table td {
+            padding: 1rem 1.25rem !important;
+            vertical-align: middle;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        .table thead th, .table-light th, thead.table-light th {
+            background: rgba(168, 85, 247, 0.28) !important;
+            color: var(--osu-pink) !important;
+            font-weight: 700;
+            font-size: 0.92rem;
+            letter-spacing: 0.8px;
+            border-bottom: 2px solid var(--osu-pink) !important;
+            text-transform: uppercase;
+        }
+        .table tbody tr {
+            transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .table tbody tr:hover {
+            background-color: rgba(255, 102, 170, 0.12) !important;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(255, 255, 255, 0.02) !important;
+        }
+        .table-bordered {
+            border: 1px solid var(--osu-border) !important;
+        }
+        .table-bordered th, .table-bordered td {
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        }
+        .table-secondary, tfoot.table-secondary th {
+            background: rgba(30, 30, 44, 0.9) !important;
+            color: #FFFFFF !important;
+            border-top: 2px solid var(--osu-pink) !important;
+        }
+
+        /* アラート */
+        .alert {
+            border-radius: 18px !important;
+            backdrop-filter: blur(12px);
+            border-width: 1.5px !important;
+            font-weight: 500;
+            padding: 1rem 1.4rem;
+        }
+        .alert-danger {
+            background: rgba(244, 63, 94, 0.16) !important;
+            border-color: #F43F5E !important;
+            color: #FFA2B3 !important;
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
+        }
+        .alert-success {
+            background: rgba(16, 185, 129, 0.16) !important;
+            border-color: #10B981 !important;
+            color: #A7F3D0 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+        }
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.16) !important;
+            border-color: #F59E0B !important;
+            color: #FDE68A !important;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.25);
+        }
+        .alert-info {
+            background: rgba(56, 189, 248, 0.16) !important;
+            border-color: #38BDF8 !important;
+            color: #BAE6FD !important;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+        }
+
+        /* テキストカラーの調整 */
+        .text-muted {
+            color: var(--osu-text-muted) !important;
+        }
+        .text-primary {
+            color: var(--osu-pink) !important;
+        }
+        .text-success {
+            color: #34D399 !important;
+        }
+        .text-warning {
+            color: #FBBF24 !important;
+        }
+        .text-danger {
+            color: #FB7185 !important;
+        }
+        .border-top {
+            border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* osu! フッター微粒子エフェクト・クレジット */
+        .osu-footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--osu-text-muted);
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        .osu-footer span {
+            color: var(--osu-pink);
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-custom mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand text-white" href="{% if request.session.employee_no %}{% url 'psys:MainMenu' %}{% else %}{% url 'psys:Index' %}{% endif %}">
-                販売支援システム
+            <a class="navbar-brand" href="{% if request.session.employee_no %}{% url 'psys:MainMenu' %}{% else %}{% url 'psys:Index' %}{% endif %}">
+                <span class="osu-badge">PS</span>
+                <span>販売支援システム</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
                 {% if request.session.employee_no %}
@@ -53,11 +473,11 @@
                         <a class="nav-link" href="{% url 'psys:EmployeeRegist' %}">従業員登録</a>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center">
-                    <span class="navbar-text me-3 text-light">
-                        👤 {{ request.session.employee_name }}（{{ request.session.employee_no }}）
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-light small fw-bold">
+                        👤 {{ request.session.employee_name }} <span class="text-muted">({{ request.session.employee_no }})</span>
                     </span>
-                    <a href="{% url 'psys:logout' %}" class="btn btn-danger btn-sm" id="logoutButton">ログアウト</a>
+                    <a href="{% url 'psys:logout' %}" class="btn btn-outline-danger btn-sm" id="logoutButton">ログアウト</a>
                 </div>
                 {% else %}
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -78,14 +498,18 @@
             {% for message in messages %}
                 <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'warning' %}warning{% else %}success{% endif %} alert-dismissible fade show" role="alert">
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
 
         {% block content %}
-        <!-- 子テンプレートの内容 -->
+        <!-- 各画面のコンテンツ -->
         {% endblock %}
+
+        <div class="osu-footer">
+            <p class="mb-0">健康食品ロイヤル社 販売支援システム &copy; 2026 <span>PSYS Cyber Edition</span></p>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

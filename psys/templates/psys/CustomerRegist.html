@@ -43,7 +43,7 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="Customer_code" class="form-label fw-bold">得意先コード</label>
-                    <input type="text" name="Customer_code" id="Customer_code" class="form-control" maxlength="6" value="{{ next_code }}" readonly style="background-color: #f0f0f0;">
+                    <input type="text" name="Customer_code" id="Customer_code" class="form-control" maxlength="6" value="{{ next_code }}" readonly>
                     <div class="form-text">採番テーブルに基づき自動採番されます。</div>
                 </div>
                 <div class="mb-3">

@@ -4,35 +4,51 @@
 
 {% block content %}
 <div class="row justify-content-center mt-4">
-    <div class="col-md-9">
-        <h2 class="header-title text-success">得意先別集計メニュー</h2>
-        <p class="text-muted">集計業務を選択してください。</p>
+    <div class="col-md-10 col-lg-9">
+        <div class="d-flex align-items-center justify-content-between header-title">
+            <h2 class="mb-0"><span class="text-gradient">得意先別集計メニュー</span></h2>
+            <span class="badge rounded-pill" style="background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981; padding: 0.5rem 1rem;">
+                ORDER ANALYTICS
+            </span>
+        </div>
+        <p class="text-muted mb-4">集計業務の種類を選択してください。</p>
 
-        <div class="row g-4 mt-2">
+        <div class="row g-4 mt-1">
             <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center">
-                    <h5 class="text-success mb-3">月別受注集計</h5>
-                    <p class="text-muted small">指定した年月の得意先別受注金額を集計して一覧表示します。</p>
-                    <a href="{% url 'psys:MonthlyOrderSummary' %}" name="MonthlyOrderSummary" class="btn btn-outline-success btn-sm mt-auto">月別受注集計へ</a>
+                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
+                    <div class="osu-mode-circle mb-3" style="width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #10B981, #059669); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 18px rgba(16, 185, 129, 0.45);">
+                        📅
+                    </div>
+                    <h5 class="text-success mb-2">月別受注集計</h5>
+                    <p class="text-muted small mb-3">指定した年月の得意先別受注金額・総合計を即時集計します。</p>
+                    <a href="{% url 'psys:MonthlyOrderSummary' %}" name="MonthlyOrderSummary" class="btn btn-success btn-sm w-100 mt-auto">月別集計を開く</a>
                 </div>
             </div>
+
             <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center">
-                    <h5 class="text-success mb-3">年次受注集計</h5>
-                    <p class="text-muted small">指定した年の得意先別年間受注金額を集計して一覧表示します。</p>
-                    <a href="{% url 'psys:YearlyOrderSummary' %}" name="YearlyOrderSummary" class="btn btn-outline-success btn-sm mt-auto">年次受注集計へ</a>
+                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
+                    <div class="osu-mode-circle mb-3" style="width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #38BDF8, #0284C7); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);">
+                        📈
+                    </div>
+                    <h5 class="mb-2" style="color: #38BDF8;">年次受注集計</h5>
+                    <p class="text-muted small mb-3">指定した1年間の得意先別売上推移と年間総合計を算出します。</p>
+                    <a href="{% url 'psys:YearlyOrderSummary' %}" name="YearlyOrderSummary" class="btn btn-secondary btn-sm w-100 mt-auto" style="border-color: #38BDF8; color: #38BDF8;">年次集計を開く</a>
                 </div>
             </div>
+
             <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center">
-                    <h5 class="text-success mb-3">商品別受注集計</h5>
-                    <p class="text-muted small">特定の得意先について、商品ごとの受注数量・受注金額を集計します。</p>
-                    <a href="{% url 'psys:ItemOrderSummary' %}" name="ItemOrderSummary" class="btn btn-outline-success btn-sm mt-auto">商品別受注集計へ</a>
+                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
+                    <div class="osu-mode-circle mb-3" style="width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #FF66AA, #A855F7); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: var(--osu-glow-pink);">
+                        📦
+                    </div>
+                    <h5 class="text-primary mb-2">商品別受注集計</h5>
+                    <p class="text-muted small mb-3">特定の得意先について、取扱商品別の受注数量・単価・小計を集計します。</p>
+                    <a href="{% url 'psys:ItemOrderSummary' %}" name="ItemOrderSummary" class="btn btn-primary btn-sm w-100 mt-auto">商品別集計を開く</a>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+        <div class="d-flex justify-content-between mt-5 pt-3 border-top">
             <a href="{% url 'psys:MainMenu' %}" name="MainMenuButton" class="btn btn-secondary">管理メニュー</a>
             <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger">ログアウト</a>
         </div>

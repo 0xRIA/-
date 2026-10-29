@@ -5,11 +5,20 @@
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-6 col-lg-5">
-        <div class="card card-custom p-4">
-            <h3 class="card-title text-center mb-4">ログイン</h3>
+        <div class="card card-custom p-5 position-relative overflow-hidden">
+            <!-- 装飾リング -->
+            <div style="position: absolute; top: -35px; right: -35px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid rgba(255, 102, 170, 0.2); pointer-events: none;"></div>
+
+            <div class="text-center mb-4">
+                <div class="osu-badge mx-auto mb-2" style="width: 56px; height: 56px; font-size: 1.4rem; border-radius: 50%; background: linear-gradient(135deg, var(--osu-pink), var(--osu-purple)); display: flex; align-items: center; justify-content: center; box-shadow: var(--osu-glow-pink);">
+                    🔑
+                </div>
+                <h3 class="fw-bold text-gradient mb-1">従業員ログイン</h3>
+                <p class="text-muted small">ID・パスワードを入力して認証してください</p>
+            </div>
 
             {% if error %}
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger text-center mb-4" role="alert">
                 {{ error }}
             </div>
             {% endif %}
@@ -17,16 +26,16 @@
             <form action="{% url 'psys:login' %}" method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="Employee_no" class="form-label">従業員番号（6桁）</label>
+                    <label for="Employee_no" class="form-label">従業員番号 <span class="text-muted small">（半角数字6桁）</span></label>
                     <input type="text" name="Employee_no" id="Employee_no" class="form-control" maxlength="6" value="{{ employee_no|default:'' }}" required placeholder="例: R20001">
                 </div>
                 <div class="mb-4">
-                    <label for="password" class="form-label">パスワード（8桁）</label>
+                    <label for="password" class="form-label">パスワード <span class="text-muted small">（8桁以内）</span></label>
                     <input type="password" name="password" id="password" class="form-control" maxlength="8" required placeholder="パスワードを入力">
                 </div>
-                <div class="d-grid gap-2">
-                    <button type="submit" name="loginButton" class="btn btn-primary">ログイン</button>
-                    <a href="{% url 'psys:Index' %}" name="topButton" class="btn btn-outline-secondary">top</a>
+                <div class="d-grid gap-3 pt-2">
+                    <button type="submit" name="loginButton" class="btn btn-primary btn-lg">ログイン</button>
+                    <a href="{% url 'psys:Index' %}" name="topButton" class="btn btn-secondary">トップページへ戻る</a>
                 </div>
             </form>
         </div>

@@ -4,45 +4,65 @@
 
 {% block content %}
 <div class="row justify-content-center mt-4">
-    <div class="col-md-8">
-        <h2 class="header-title">管理メニュー</h2>
-        <p class="text-muted">業務を選択してください。</p>
+    <div class="col-md-9 col-lg-8">
+        <div class="d-flex align-items-center justify-content-between header-title">
+            <h2 class="mb-0"><span class="text-gradient">管理メニュー</span></h2>
+            <span class="badge rounded-pill" style="background: rgba(255, 102, 170, 0.2); color: var(--osu-pink); border: 1px solid var(--osu-pink); padding: 0.5rem 1rem;">
+                MAIN DASHBOARD
+            </span>
+        </div>
+        <p class="text-muted mb-4">実行したい業務システムを選択してください。</p>
 
-        <div class="row g-4 mt-2">
+        <div class="row g-4 mt-1">
             <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center">
-                    <h4 class="card-title text-primary mb-3">得意先管理</h4>
-                    <p class="card-text text-muted mb-4">
-                        得意先情報の一覧表示、検索、新規登録、変更、削除を行います。
+                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
+                    <div class="osu-mode-circle mb-3" style="width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #FF66AA, #A855F7); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: var(--osu-glow-pink);">
+                        🏢
+                    </div>
+                    <h4 class="card-title text-primary mb-2">得意先管理</h4>
+                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
+                        得意先情報の一覧照会、コード検索、新規登録、変更、安全な論理削除を行います。
                     </p>
-                    <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerManagementMenu" class="btn btn-primary mt-auto">得意先管理</a>
+                    <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerManagementMenu" class="btn btn-primary w-100 mt-auto">得意先管理へ</a>
                 </div>
             </div>
+
             <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center">
-                    <h4 class="card-title text-success mb-3">得意先別集計</h4>
-                    <p class="card-text text-muted mb-4">
-                        月別受注集計、年次受注集計、商品別受注集計を行います。
+                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
+                    <div class="osu-mode-circle mb-3" style="width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #10B981, #059669); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);">
+                        📊
+                    </div>
+                    <h4 class="card-title text-success mb-2">得意先別集計</h4>
+                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
+                        月別受注集計、年間売上集計、商品別受注集計および総合計のリアルタイム分析を行います。
                     </p>
-                    <a href="{% url 'psys:OrderSummaryMenu' %}" name="CustomerOrderSummaryMenu" class="btn btn-success mt-auto">得意先集計</a>
+                    <a href="{% url 'psys:OrderSummaryMenu' %}" name="CustomerOrderSummaryMenu" class="btn btn-success w-100 mt-auto">得意先集計へ</a>
                 </div>
             </div>
+
             <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center">
-                    <h4 class="card-title text-info mb-3">従業員管理</h4>
-                    <p class="card-text text-muted mb-4">
-                        新規従業員のアカウント登録を行います。
+                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
+                    <div class="osu-mode-circle mb-3" style="width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #38BDF8, #0284C7); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 20px rgba(56, 189, 248, 0.45);">
+                        👤
+                    </div>
+                    <h4 class="card-title mb-2" style="color: #38BDF8;">従業員管理</h4>
+                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
+                        新規利用従業員のアカウント発行と初期パスワード設定を行います。
                     </p>
-                    <a href="{% url 'psys:EmployeeRegist' %}" class="btn btn-info text-white mt-auto">従業員新規登録</a>
+                    <a href="{% url 'psys:EmployeeRegist' %}" class="btn btn-secondary w-100 mt-auto" style="border-color: #38BDF8; color: #38BDF8;">従業員新規登録</a>
                 </div>
             </div>
+
             <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center">
-                    <h4 class="card-title text-danger mb-3">ログアウト</h4>
-                    <p class="card-text text-muted mb-4">
-                        システムから安全にログアウトします。
+                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
+                    <div class="osu-mode-circle mb-3" style="width: 68px; height: 68px; border-radius: 50%; background: linear-gradient(135deg, #F43F5E, #BE123C); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 20px rgba(244, 63, 94, 0.45);">
+                        🚪
+                    </div>
+                    <h4 class="card-title text-danger mb-2">ログアウト</h4>
+                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
+                        現在のセッションを安全に終了し、トップポータル画面へ戻ります。
                     </p>
-                    <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger mt-auto">ログアウト</a>
+                    <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger w-100 mt-auto">ログアウト</a>
                 </div>
             </div>
         </div>
