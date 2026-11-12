@@ -8,14 +8,13 @@
         <h2 class="header-title">得意先検索</h2>
 
         <div class="card card-custom p-4 mb-4">
-            <form action="{% url 'psys:CustomerSearch' %}" method="post">
-                {% csrf_token %}
+            <form action="{% url 'psys:CustomerSearch' %}" method="get">
                 <div class="row g-2 align-items-center">
                     <div class="col-auto">
-                        <label for="seartch_id" class="col-form-label fw-bold">得意先コード</label>
+                        <label for="Customer_code" class="col-form-label fw-bold">得意先コード</label>
                     </div>
                     <div class="col-auto">
-                        <input type="text" name="seartch_id" id="seartch_id" class="form-control" maxlength="6" value="{{ seartch_id|default:'' }}" placeholder="例: RA0001" required>
+                        <input type="text" name="Customer_code" id="Customer_code" class="form-control" maxlength="6" value="{{ Customer_code|default:'' }}" placeholder="例: RA0001" required>
                     </div>
                     <div class="col-auto">
                         <button type="submit" name="search" class="btn btn-primary">検索</button>
@@ -61,10 +60,6 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="d-flex gap-2 justify-content-end">
-                <a href="{% url 'psys:CustomerUpdate' %}?search_id={{ customer.customer_code }}" class="btn btn-warning btn-sm">変更</a>
-                <a href="{% url 'psys:CustomerDelete' %}?search_id={{ customer.customer_code }}" class="btn btn-danger btn-sm">削除</a>
-            </div>
         </div>
         {% endif %}
 

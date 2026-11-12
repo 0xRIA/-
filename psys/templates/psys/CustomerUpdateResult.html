@@ -19,9 +19,8 @@
             {% endif %}
 
             <div class="d-flex justify-content-center gap-3 mt-4">
-                <a href="{% url 'psys:CustomerList' %}" class="btn btn-primary">得意先一覧へ</a>
-                <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerMnagementMenuButton" class="btn btn-secondary">得意先管理メニュー</a>
-                <a href="{% url 'psys:CustomerUpdate' %}" name="back" class="btn btn-outline-secondary">戻る</a>
+                <a href="{% url 'psys:CustomerUpdate' %}" name="back" class="btn btn-secondary">戻る</a>
+                <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerMnagementMenuButton" class="btn btn-outline-primary">得意先管理メニュー</a>
             </div>
         </div>
     </div>

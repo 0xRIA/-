@@ -5,11 +5,8 @@
 {% block content %}
 <div class="row justify-content-center mt-3">
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center header-title">
+        <div class="header-title">
             <h2>得意先一覧</h2>
-            <div>
-                <a href="{% url 'psys:CustomerRegist' %}" class="btn btn-success btn-sm">+ 新規得意先登録</a>
-            </div>
         </div>
 
         {% if customer_list %}
@@ -23,7 +20,6 @@
                         <th>郵便番号</th>
                         <th>住所</th>
                         <th>割引率</th>
-                        <th class="text-center">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,11 +31,6 @@
                         <td>{{ c.customer_postalcode }}</td>
                         <td>{{ c.customer_address }}</td>
                         <td>{{ c.discount_rate }}%</td>
-                        <td class="text-center">
-                            <a href="{% url 'psys:CustomerSearch' %}?search_id={{ c.customer_code }}" class="btn btn-outline-primary btn-sm me-1">詳細</a>
-                            <a href="{% url 'psys:CustomerUpdate' %}?search_id={{ c.customer_code }}" class="btn btn-outline-warning btn-sm me-1">変更</a>
-                            <a href="{% url 'psys:CustomerDelete' %}?search_id={{ c.customer_code }}" class="btn btn-outline-danger btn-sm">削除</a>
-                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

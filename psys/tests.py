@@ -87,6 +87,7 @@ class IndexAndAuthTests(PsysBaseTestCase):
             reverse('psys:MonthlyOrderSummary'),
             reverse('psys:YearlyOrderSummary'),
             reverse('psys:ItemOrderSummary'),
+            reverse('psys:EmployeeRegist'),
         ]
         for url in protected_urls:
             response = self.client.get(url)
@@ -122,16 +123,18 @@ class CustomerManagementTests(PsysBaseTestCase):
         self.assertContains(response, "A店社")
 
     def test_customer_search_found(self):
-        response = self.client.post(reverse('psys:CustomerSearch'), {
-            'seartch_id': 'RA0001'
+        # GETリクエストで検索
+        response = self.client.get(reverse('psys:CustomerSearch'), {
+            'Customer_code': 'RA0001'
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "A店社")
         self.assertContains(response, "06-128-3581")
 
     def test_customer_search_not_found(self):
-        response = self.client.post(reverse('psys:CustomerSearch'), {
-            'seartch_id': 'NONEXIST'
+        # GETリクエストで該当なし
+        response = self.client.get(reverse('psys:CustomerSearch'), {
+            'Customer_code': 'NONEXIST'
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "該当する得意先コードは存在しません。")
@@ -140,7 +143,7 @@ class CustomerManagementTests(PsysBaseTestCase):
         response = self.client.get(reverse('psys:CustomerRegist'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "得意先登録")
-        self.assertContains(response, "RA0016")
+        self.assertContains(response, "得意先名")
 
     def test_customer_regist_success(self):
         response = self.client.post(reverse('psys:CustomerRegist'), {
@@ -207,13 +210,12 @@ class CustomerManagementTests(PsysBaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "更新できませんでした。")
 
-    def test_customer_search_with_customer_code_param(self):
-        # 仕様書通りの Customer_code キーでも検索できるか
+    def test_customer_search_prg_on_post(self):
+        # 万が一POSTでリクエストが来た場合はPRG（GETへリダイレクト）され、POSTのまま画面表示されないことを確認
         response = self.client.post(reverse('psys:CustomerSearch'), {
             'Customer_code': 'RA0001'
         })
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "A店社")
+        self.assertRedirects(response, f"{reverse('psys:CustomerSearch')}?Customer_code=RA0001")
 
     def test_customer_delete_logical(self):
         # 削除前
@@ -285,6 +287,10 @@ class OrderSummaryTests(PsysBaseTestCase):
 
 
 class EmployeeRegistTests(PsysBaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.login_as_employee()
+
     def test_employee_regist_success(self):
         response = self.client.post(reverse('psys:EmployeeRegist'), {
             'employee_no': 'R20099',

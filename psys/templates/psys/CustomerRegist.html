@@ -18,9 +18,8 @@
                 {% endif %}
             </div>
             <div class="d-flex justify-content-center gap-3 mt-3">
-                <a href="{% url 'psys:CustomerRegist' %}" class="btn btn-outline-success">続けて登録する</a>
-                <a href="{% url 'psys:CustomerList' %}" class="btn btn-primary">得意先一覧を見る</a>
-                <a href="{% url 'psys:CustomerManagementMenu' %}" name="back" class="btn btn-secondary">戻る</a>
+                <a href="{% url 'psys:CustomerRegist' %}" name="back" class="btn btn-secondary">戻る</a>
+                <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerMnagementMenuButton" class="btn btn-outline-primary">得意先管理メニュー</a>
             </div>
         </div>
         {% else %}
@@ -41,11 +40,6 @@
         <div class="card card-custom p-4 mb-4">
             <form action="{% url 'psys:CustomerRegist' %}" method="post">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="Customer_code" class="form-label fw-bold">得意先コード</label>
-                    <input type="text" name="Customer_code" id="Customer_code" class="form-control" maxlength="6" value="{{ next_code }}" readonly>
-                    <div class="form-text">採番テーブルに基づき自動採番されます。</div>
-                </div>
                 <div class="mb-3">
                     <label for="Customer_name" class="form-label fw-bold">得意先名 <span class="text-danger">*</span></label>
                     <input type="text" name="Customer_name" id="Customer_name" class="form-control" maxlength="32" value="{{ customer_name|default:'' }}" required placeholder="例: 神戸物産株式会社">

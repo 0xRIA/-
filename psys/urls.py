@@ -6,11 +6,9 @@ app_name = 'psys'
 urlpatterns = [
     # トップ画面
     path('', views.Index, name='Index'),
-    path('index', views.Index, name='Index_alias'),
 
     # 認証
     path('Login', views.login_view, name='login'),
-    path('login', views.login_view, name='login_lower'),
     path('logout', views.logout_view, name='logout'),
 
     # メニュー
@@ -20,7 +18,6 @@ urlpatterns = [
     # 得意先管理
     path('CustomerList', views.CustomerList, name='CustomerList'),
     path('CustomerSearch', views.CustomerSearch, name='CustomerSearch'),
-    path('CustomerSerch', views.CustomerSearch, name='CustomerSerch'),  # プロトタイプ互換
     path('CustomerRegist', views.CustomerRegist, name='CustomerRegist'),
     path('CustomerDelete', views.CustomerDelete, name='CustomerDelete'),
     path('CustomerDeleteResult', views.CustomerDeleteResult, name='CustomerDeleteResult'),

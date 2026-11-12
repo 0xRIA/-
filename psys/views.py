@@ -73,37 +73,30 @@ def CustomerList(request):
 
 @login_required_psys
 def CustomerSearch(request):
-    """得意先検索画面 (CustomerSearch.html)"""
+    """得意先検索画面 (CustomerSearch.html) - GETベース検索照会"""
+    # POSTリクエストで送信された場合はGETにリダイレクト (PRGパターン)
+    if request.method == 'POST':
+        customer_code = request.POST.get('Customer_code', '').strip()
+        if customer_code:
+            return redirect(f"{reverse('psys:CustomerSearch')}?Customer_code={customer_code}")
+        return redirect('psys:CustomerSearch')
+
     customer = None
     error = None
-    search_id = None
+    customer_code = request.GET.get('Customer_code', '').strip()
 
-    if request.method == 'POST':
-        # プロトタイプ互換(seartch_id)・仕様書準拠(Customer_code)・標準(search_id)をすべて受け付ける
-        search_id = (request.POST.get('seartch_id') or 
-                     request.POST.get('Customer_code') or 
-                     request.POST.get('search_id') or '').strip()
-        if not search_id:
+    if 'Customer_code' in request.GET:
+        if not customer_code:
             error = "得意先コードを入力してください。"
         else:
-            customer = Customer.objects.filter(customer_code=search_id, delete_flag=0).first()
-            if not customer:
-                error = "該当する得意先コードは存在しません。"
-    else:
-        # GETリクエスト（一覧からのリンク等のクエリパラメータ対応）
-        search_id = (request.GET.get('search_id') or 
-                     request.GET.get('Customer_code') or 
-                     request.GET.get('seartch_id') or '').strip()
-        if search_id:
-            customer = Customer.objects.filter(customer_code=search_id, delete_flag=0).first()
+            customer = Customer.objects.filter(customer_code=customer_code, delete_flag=0).first()
             if not customer:
                 error = "該当する得意先コードは存在しません。"
 
     return render(request, "psys/CustomerSearch.html", {
         'customer': customer,
         'error': error,
-        'seartch_id': search_id,
-        'Customer_code': search_id,
+        'Customer_code': customer_code,
     })
 
 
@@ -529,6 +522,7 @@ def ItemOrderSummary(request):
     })
 
 
+@login_required_psys
 def EmployeeRegist(request):
     """従業員新規登録画面 (EmployeeRegist.html)"""
     if request.method == 'POST':
