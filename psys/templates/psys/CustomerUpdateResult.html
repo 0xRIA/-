@@ -3,26 +3,16 @@
 {% block title %}得意先更新結果 - 販売支援システム{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-4">
-    <div class="col-md-7">
-        <div class="card card-custom p-4 text-center">
-            {% if success %}
-            <div class="alert alert-success" role="alert">
-                <h4 class="alert-heading">更新完了</h4>
-                <p class="mb-0">更新を完了しました。</p>
-            </div>
-            {% else %}
-            <div class="alert alert-danger" role="alert">
-                <h4 class="alert-heading">更新失敗</h4>
-                <p class="mb-0">更新できませんでした。{{ error_detail }}</p>
-            </div>
-            {% endif %}
+<h1>得意先更新結果</h1>
 
-            <div class="d-flex justify-content-center gap-3 mt-4">
-                <a href="{% url 'psys:CustomerUpdate' %}" name="back" class="btn btn-secondary">戻る</a>
-                <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerMnagementMenuButton" class="btn btn-outline-primary">得意先管理メニュー</a>
-            </div>
-        </div>
-    </div>
-</div>
+{% if success %}
+<p style="color: green;">更新を完了しました。</p>
+{% else %}
+<p style="color: red;">更新できませんでした。{{ error_detail }}</p>
+{% endif %}
+
+<p>
+    <a href="{% url 'psys:CustomerUpdate' %}"><button type="button" name="back">戻る</button></a>
+    <a href="{% url 'psys:CustomerManagementMenu' %}"><button type="button" name="CustomerMnagementMenuButton">得意先管理メニュー</button></a>
+</p>
 {% endblock %}

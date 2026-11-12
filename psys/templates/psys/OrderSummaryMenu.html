@@ -3,43 +3,20 @@
 {% block title %}得意先別集計メニュー - 販売支援システム{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-4">
-    <div class="col-md-10 col-lg-9">
-        <div class="header-title">
-            <h2 class="mb-0">得意先別集計メニュー</h2>
-        </div>
-        <p class="text-muted mb-4">集計業務の種類を選択してください。</p>
+<h1>得意先別集計メニュー</h1>
 
-        <div class="row g-4 mt-1">
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-success mb-2">月別受注集計</h5>
-                    <p class="text-muted small mb-3">指定した年月の得意先別受注金額・総合計を集計します。</p>
-                    <a href="{% url 'psys:MonthlyOrderSummary' %}" name="MonthlyOrderSummary" class="btn btn-success btn-sm w-100 mt-auto">月別集計を開く</a>
-                </div>
-            </div>
+<p>
+    <a href="{% url 'psys:MonthlyOrderSummary' %}"><button type="button" name="MonthlyOrderSummary">月別受注集計</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:YearlyOrderSummary' %}"><button type="button" name="YearlyOrderSummary">年次受注集計</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:ItemOrderSummary' %}"><button type="button" name="ItemOrderSummary">商品別受注集計</button></a>
+</p>
 
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-primary mb-2">年次受注集計</h5>
-                    <p class="text-muted small mb-3">指定した1年間の得意先別売上推移と年間総合計を算出します。</p>
-                    <a href="{% url 'psys:YearlyOrderSummary' %}" name="YearlyOrderSummary" class="btn btn-primary btn-sm w-100 mt-auto">年次集計を開く</a>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-secondary mb-2">商品別受注集計</h5>
-                    <p class="text-muted small mb-3">特定の得意先について、取扱商品別の受注数量・単価・小計を集計します。</p>
-                    <a href="{% url 'psys:ItemOrderSummary' %}" name="ItemOrderSummary" class="btn btn-outline-secondary btn-sm w-100 mt-auto">商品別集計を開く</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-between mt-5 pt-3 border-top">
-            <a href="{% url 'psys:MainMenu' %}" name="MainMenuButton" class="btn btn-secondary">管理メニュー</a>
-            <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger">ログアウト</a>
-        </div>
-    </div>
-</div>
+<p>
+    <a href="{% url 'psys:MainMenu' %}"><button type="button" name="MainMenuButton">管理メニュー</button></a>
+    <a href="{% url 'psys:logout' %}"><button type="button" name="logoutButton">ログアウト</button></a>
+</p>
 {% endblock %}

@@ -3,54 +3,18 @@
 {% block title %}管理メニュー - 販売支援システム{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-4">
-    <div class="col-md-9 col-lg-8">
-        <div class="header-title">
-            <h2 class="mb-0">管理メニュー</h2>
-        </div>
-        <p class="text-muted mb-4">実行したい業務システムを選択してください。</p>
+<h1>管理メニュー</h1>
 
-        <div class="row g-4 mt-1">
-            <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h4 class="card-title text-primary mb-2">得意先管理</h4>
-                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
-                        得意先情報の一覧照会、コード検索、新規登録、変更、論理削除を行います。
-                    </p>
-                    <a href="{% url 'psys:CustomerManagementMenu' %}" name="CustomerManagementMenu" class="btn btn-primary w-100 mt-auto">得意先管理へ</a>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h4 class="card-title text-success mb-2">得意先集計</h4>
-                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
-                        月別受注集計、年間売上集計、商品別受注集計を行います。
-                    </p>
-                    <a href="{% url 'psys:OrderSummaryMenu' %}" name="CustomerOrderSummaryMenu" class="btn btn-success w-100 mt-auto">得意先集計へ</a>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h4 class="card-title text-secondary mb-2">従業員管理</h4>
-                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
-                        新規利用従業員のアカウント発行と初期パスワード設定を行います。
-                    </p>
-                    <a href="{% url 'psys:EmployeeRegist' %}" class="btn btn-outline-secondary w-100 mt-auto">従業員新規登録</a>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h4 class="card-title text-danger mb-2">ログアウト</h4>
-                    <p class="card-text text-muted mb-4 small" style="line-height: 1.6;">
-                        現在のセッションを終了し、トップ画面へ戻ります。
-                    </p>
-                    <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger w-100 mt-auto">ログアウト</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<p>
+    <a href="{% url 'psys:CustomerManagementMenu' %}"><button type="button" name="CustomerManagementMenu">得意先管理</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:OrderSummaryMenu' %}"><button type="button" name="CustomerOrderSummaryMenu">得意先集計</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:EmployeeRegist' %}"><button type="button" name="EmployeeRegist">従業員管理</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:logout' %}"><button type="button" name="logoutButton">ログアウト</button></a>
+</p>
 {% endblock %}

@@ -3,59 +3,24 @@
 {% block title %}得意先管理メニュー - 販売支援システム{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-4">
-    <div class="col-md-10 col-lg-9">
-        <div class="header-title">
-            <h2 class="mb-0">得意先管理メニュー</h2>
-        </div>
-        <p class="text-muted mb-4">実行したい得意先業務を選択してください。</p>
+<h1>得意先管理メニュー</h1>
 
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-primary mb-2">得意先一覧</h5>
-                    <p class="text-muted small mb-3">登録されているすべての得意先情報を一覧表示します。</p>
-                    <a href="{% url 'psys:CustomerList' %}" name="CustomerList" class="btn btn-outline-primary btn-sm w-100 mt-auto">一覧を開く</a>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-primary mb-2">得意先検索</h5>
-                    <p class="text-muted small mb-3">得意先コードから顧客詳細情報を検索・照会します。</p>
-                    <a href="{% url 'psys:CustomerSearch' %}" name="CustomerSearch" class="btn btn-outline-primary btn-sm w-100 mt-auto">検索を開く</a>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-success mb-2">得意先登録</h5>
-                    <p class="text-muted small mb-3">新しい得意先情報を登録します。</p>
-                    <a href="{% url 'psys:CustomerRegist' %}" name="CustomerRegist" class="btn btn-outline-success btn-sm w-100 mt-auto">新規登録へ</a>
-                </div>
-            </div>
-
-            <div class="col-md-6 mt-3">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-warning mb-2">得意先更新</h5>
-                    <p class="text-muted small mb-3">登録済み得意先の社名・電話番号・住所・割引率などの情報を修正します。</p>
-                    <a href="{% url 'psys:CustomerUpdate' %}" name="CustomerUpdate" class="btn btn-outline-warning btn-sm w-100 mt-auto">情報変更へ</a>
-                </div>
-            </div>
-
-            <div class="col-md-6 mt-3">
-                <div class="card card-custom h-100 p-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="text-danger mb-2">得意先削除</h5>
-                    <p class="text-muted small mb-3">登録済み得意先情報の論理削除を行います。</p>
-                    <a href="{% url 'psys:CustomerDelete' %}" name="CustomerDelete" class="btn btn-outline-danger btn-sm w-100 mt-auto">削除確認へ</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="d-flex justify-content-between mt-5 pt-3 border-top">
-            <a href="{% url 'psys:MainMenu' %}" name="MainMenuButton" class="btn btn-secondary">管理メニュー</a>
-            <a href="{% url 'psys:logout' %}" name="logoutButton" class="btn btn-outline-danger">ログアウト</a>
-        </div>
-    </div>
-</div>
+<p>
+    <a href="{% url 'psys:CustomerList' %}"><button type="button" name="CustomerList">得意先一覧</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:CustomerSearch' %}"><button type="button" name="CustomerSearch">得意先検索</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:CustomerRegist' %}"><button type="button" name="CustomerRegist">得意先登録</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:CustomerUpdate' %}"><button type="button" name="CustomerUpdate">得意先更新</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:CustomerDelete' %}"><button type="button" name="CustomerDelete">得意先削除</button></a>
+</p>
+<p>
+    <a href="{% url 'psys:MainMenu' %}"><button type="button" name="MainMenuButton">管理メニュー</button></a>
+</p>
 {% endblock %}
